@@ -7,10 +7,11 @@ BUILDER="opus3"
 FORCE=0
 OPTIND=1
 PKGDIR="released-packages"
+TARGET="~/rpmbuild/SOURCES"
 
 # Prints usage to standard out
 usage() {
-    echo "Usage: package [-d <pkg-dir>] [-b <build-mach>] <src-dir> <version>"
+    echo "Usage: package [-d <pkgdir>] [-b <builder>] [-t <target>] <src> <ver>"
 }
 
 # Parse command-line options
@@ -28,6 +29,9 @@ while getopts "hfd:b:" opt; do
         h)
             usage
             exit 0
+            ;;
+        t)
+            TARGET="$OPTARG"
             ;;
         *)
             ;;
@@ -81,6 +85,6 @@ echo "Creating archive ${PKGDIR}/${PACKAGE}.tar.gz..."
 tar -C "${PKGDIR}" -czvf "${PKGDIR}/${PACKAGE}.tar.gz" "${PACKAGE}"
 
 echo "Copying to build machine..."
-scp "${PKGDIR}/${PACKAGE}.tar.gz" "${BUILDER}:~/rpmbuild/SOURCES/"
+scp "${PKGDIR}/${PACKAGE}.tar.gz" "${BUILDER}:${TARGET}"
 
 #" vim: filetype=sh
